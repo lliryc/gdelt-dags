@@ -166,3 +166,10 @@ data
 
 # DS Store
 .DS_Store
+
+# Airflow folders
+logs/
+plugins/
+utils/
+operators/
+resources/
