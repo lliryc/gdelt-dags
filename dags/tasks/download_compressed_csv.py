@@ -40,9 +40,13 @@ def write_raw_gkg_content_to_db(url):
             df = pd.read_csv(io.StringIO(csv_content.decode("iso-8859-1")), sep='\t', header=None, names=columns)
           
             # Create the SQLAlchemy engine
-            engine = create_engine('postgresql+psycopg2://airflow:airflow@127.0.0.1/gdelt')
+            engine = create_engine('postgresql+psycopg2://airflow:airflow@postgres/gdelt')
             
             connection = engine.connect()
+
+            df['date_dt'] = pd.to_datetime(df['date_label'], format='%Y%m%d%H%M%S')
+
+            df['trans_type'] = 'non-en' if 'translation' in url else 'en'
             
             # Save the DataFrame to the PostgreSQL table
             df.to_sql('gkg_raw', connection, schema='raw', if_exists='append', index=False)
@@ -55,7 +59,8 @@ def write_raw_gkg_content_to_db(url):
         print(f"Failed to download the file. Status code: {response.status_code}")
         return False
 
-res = write_raw_gkg_content_to_db("http://data.gdeltproject.org/gdeltv2/20150218230000.gkg.csv.zip") 
-
-print(res)       
+if __name__ == "__main__":
+    # http://data.gdeltproject.org/gdeltv2/20150218224500.translation.gkg.csv.zip
+    res = write_raw_gkg_content_to_db("http://data.gdeltproject.org/gdeltv2/20150218230000.gkg.csv.zip") 
+    print(res)       
 
