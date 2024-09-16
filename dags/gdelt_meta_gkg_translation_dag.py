@@ -25,7 +25,6 @@ dag = DAG(
     description='A DAG that prints its run date',
     schedule_interval=timedelta(minutes=15),
     start_date=datetime(2024, 1, 1),
-    end_date=datetime(2024, 9, 12),
     catchup=True,
     max_active_runs=25
 )

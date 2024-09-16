@@ -1,0 +1,36 @@
+{
+    "include": [
+      "dags"
+    ],
+  
+    "exclude": [
+      "**/node_modules",
+      "**/__pycache__",
+      "logs",
+      "operators",
+      ".venv",
+      "plugins",
+      "resources",
+      "utils",
+      "config"
+    ],    
+
+    "reportMissingImports": "error",
+    "reportMissingTypeStubs": false,
+  
+    "pythonVersion": "3.10",
+    "pythonPlatform": "Linux",
+  
+    "executionEnvironments": [
+      {
+        "root": ".venv/bin",
+        "pythonVersion": "3.11",
+        "pythonPlatform": "Linux",
+        "extraPaths": [
+          ".venv/lib",
+          ".venv/lib64",
+        ],
+        "reportMissingImports": "warning"
+      }
+    ]
+  }

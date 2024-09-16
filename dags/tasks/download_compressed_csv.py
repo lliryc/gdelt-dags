@@ -3,6 +3,7 @@ import io
 import zipfile
 import pandas as pd
 from sqlalchemy import create_engine
+from datetime import datetime
 import io
 
 def write_raw_gkg_content_to_db(url):
@@ -37,14 +38,17 @@ def write_raw_gkg_content_to_db(url):
             ]
 
             # Read the CSV content into a pandas DataFrame
-            df = pd.read_csv(io.StringIO(csv_content.decode("iso-8859-1")), sep='\t', header=None, names=columns)
+            df = pd.read_csv(io.StringIO(csv_content.decode("iso-8859-1")), dtype=str, sep='\t', header=None, names=columns)
           
             # Create the SQLAlchemy engine
             engine = create_engine('postgresql+psycopg2://airflow:airflow@postgres/gdelt')
             
             connection = engine.connect()
 
-            df['date_dt'] = pd.to_datetime(df['date_label'], format='%Y%m%d%H%M%S')
+            # Remove rows where date_label is NA
+            df = df.dropna(subset=['date_label'])
+
+            df['date_dt'] = df['date_label'].apply(lambda x: datetime.strptime(x, '%Y%m%d%H%M%S'))
 
             df['trans_type'] = 'non-en' if 'translation' in url else 'en'
             
