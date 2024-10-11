@@ -53,7 +53,8 @@ CREATE TABLE raw.gkg_raw (
 	created timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	modified timestamp DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	processed bool DEFAULT false NOT null,
-	CONSTRAINT gkg_raw_pk PRIMARY KEY (record_uuid, date_dt)
+	CONSTRAINT gkg_raw_pk PRIMARY KEY (record_uuid, date_dt),
+  polarity float GENERATED ALWAYS AS ((string_to_array(tone, ','))[3]::float)
 ) PARTITION BY RANGE (date_dt);
 
 -- Create the archive partition for all data before 2024-01-01
