@@ -63,7 +63,7 @@ services:
       POSTGRES_PASSWORD: airflow
       POSTGRES_DB: airflow
     volumes:
-      - postgres-db-volume:/var/lib/postgresql/data
+      - gdelt-dags_postgres-db-volume-large:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "airflow"]
       interval: 10s
@@ -253,4 +253,6 @@ services:
         condition: service_completed_successfully
 
 volumes:
-  postgres-db-volume:
+  gdelt-dags_postgres-db-volume-large:
+    external: true
+    
